@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://kmkmi.github.io/sitemap.xml
+Host: https://kmkmi.github.io
