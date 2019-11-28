@@ -339,7 +339,62 @@ DES 함수는 32비트 출력값을 산출하기 위해 가장 오른쪽 32비�
 <td align="center">128, 192, or 256</td>
 </tr>
 </tbody>
-</table></div></div><div class="blog-post-nav"><div class="prev"><div class="nav-wrap"><div class="angle"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="caret-left" class="svg-inline--fa fa-caret-left fa-w-6 fa-fw " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path fill="currentColor" d="M192 127.338v257.324c0 17.818-21.543 26.741-34.142 14.142L29.196 270.142c-7.81-7.81-7.81-20.474 0-28.284l128.662-128.662c12.599-12.6 34.142-3.676 34.142 14.142z"></path></svg></div><a rel="prev" href="/리눅스 커널 (2)/"><div><p>Previous Post</p><span>리눅스 커널 (2)</span></div></a></div></div></div></div><div class="comments"><div id="disqus_thread"></div></div></article></div><footer id="footer"><div class="copyright"><span>© <a href="mailto:jk787787@naver.com">Kangmo Han</a>, All rights reserved. Powered by <!-- --> <a href="https://www.gatsbyjs.org/">Gatsby</a></span></div><div class="submenu"></div></footer></div></div><script>
+</table>
+<h2>3. AES</h2>
+<h3>(1) 개요</h3>
+<h4>1) 역사</h4>
+<ol>
+<li>NIST에서 Rijndael을 AES로 선정</li>
+</ol>
+<h4>2) 선정 기준(Criteria)</h4>
+<ol>
+<li>안정성(security), 비용(cost), 효율성(implementation)</li>
+</ol>
+<h4>3) 라운드</h4>
+<ol>
+<li>AES는 128비트 평문을 128비트 암호문으로 출력하는 알고리즘으로 non-Feistel<br>
+10,12,14라운드를 사용, 각 라운드에 대응하는 키 크기 : 128, 192, 256 비트</li>
+<li>키 크기에 따라 AES의 세가지 버전 존재 AES-(키 크기)<br>
+그러나 어떤 버전이든 키 확장 알고리즘으로부터 생성되는 라운드 키 크기는 평문과 암호문 크기와 동일한 128 비트</li>
+</ol>
+<h5></h5>
+<ul>
+<li>SubBytes 연산은 16개의 독립된 바이트 단위의 변환 수행</li>
+<li>SubBytes 변환과 InvSubBytes 변환은 서로 역변환 관계</li>
+<li>Mixcolumns와 InvMixColumns는 역변환 관계</li>
+</ul>
+<h3>(2) 암호</h3>
+<h4>1) 개요</h4>
+<ol>
+<li>SPN(Substitution-Permutation Network) 구조</li>
+<li>AES 암호화 각 라운드는 비 선형성을 갖는 S-box를 적용하여 바이트 단위로 치환 수행하는 SubBytes() 연산,<br>
+행 단위로 순환 시프트(Cyclic shift)를 수행하는 ShiftRows() 연산,<br>
+높은 확산(diffusion)을 제공하기 위해 열 단위로 혼합(mixing)하는 Mixcolumns 연산,<br>
+라운드 키와 state를 EX-OR하는 ADDRoundKey() 연산</li>
+<li>암호화 마지막 라운드 MixColumns() 연산 수행 안함</li>
+<li>알려진 블록 암호에 대한 공격에 안전하도록 설계됨, HW, SW 구현 시 속도나 코드 압축성 면에서 효율적이므로 스마트카드 등 응용에 적합  </li>
+</ol>
+<h5></h5>
+<ul>
+<li>SPN 구조는 라운드 함수가 역변환이 되어야 한다는 제약이 있지만 더 많은 병렬성(parallelism)을 제공하기 때문에 암 * 복호화 알고리즘의 고속화를 요구하며, 컴퓨터 프로세서가 더 많은 병렬성을 지원하게 된 현 추세에 부응하는 방식</li>
+<li>SPN은 입력을 여러 개의 소블록으로 나누고 각 소블록을 S-box에 입력하여 치환시키고 S-box의 출력을 P-box로 전치하는 과정을 반복</li>
+<li>AES 4가지 암호화 과정(바이트 치환 변환, 행 이동, 열 혼합, 라운드 키 더하기) : 치환, 시프트, 그리고 DES에는 없는 비트 혼합 </li>
+<li>Feistel : DES, LOKI, CAST, Blowfish, MISTY, RC5, RC6, CAST256, E2, Twofish, Mars</li>
+<li>SPN : SAFER, SHARK, Square, CRYPTION, Rijndael, SAFER+, Serpent, PRESENT</li>
+</ul>
+<h2>4. 기타 대칭키 암호 알고리즘</h2>
+<h4>1) IDEA(International Data Encryption Algorithm)</h4>
+<ol>
+<li>스위스 연방 기술기관, 128 비트 키, 64 비트 블록 암호, Feistel과 SPN의 중간 형태인 Lai-Massey Scheme</li>
+<li>8라운드에 걸쳐 데이터를 변환하고 마지막에 한 번 더 키를 적용시켜 64 비트 암호문을 생성 때문에 보통 8.5라운드라고 말함<br>
+IDEA는 DES와 달리 S-box를 사용 안하고, 대수적 구조가 서로 다른 연상ㄴ을 교대 사용하여 암호 강도 증가</li>
+<li>현재까지 특별한 분석 방법 알려지지 않아 DES에 비해 안전한 것으로 판단, PGP(Pretty Good Privacy)의 데이터 암호 알고리즘으로 채택 사용<br>
+DES보다 2배 정도 빠르고, 무차별 공격에 더욱 효율적</li>
+</ol>
+<h4>2) RC5</h4>
+<ol>
+<li></li>
+</ol></div></div><div class="blog-post-nav"><div class="prev"><div class="nav-wrap"><div class="angle"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="caret-left" class="svg-inline--fa fa-caret-left fa-w-6 fa-fw " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path fill="currentColor" d="M192 127.338v257.324c0 17.818-21.543 26.741-34.142 14.142L29.196 270.142c-7.81-7.81-7.81-20.474 0-28.284l128.662-128.662c12.599-12.6 34.142-3.676 34.142 14.142z"></path></svg></div><a rel="prev" href="/리눅스 커널 (2) - 빌드와 설치, 주의사항/"><div><p>Previous Post</p><span>리눅스 커널 (2) - 빌드와 설치, 주의사항</span></div></a></div></div><div class="next"><div class="nav-wrap"><a rel="next" href="/리눅스 커널 (3) - 프로세스 관리/"><div><p>Next Post</p><span>리눅스 커널 (3) - 프로세스 관리</span></div></a><div class="angle"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="caret-right" class="svg-inline--fa fa-caret-right fa-w-6 fa-fw " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path fill="currentColor" d="M0 384.662V127.338c0-17.818 21.543-26.741 34.142-14.142l128.662 128.662c7.81 7.81 7.81 20.474 0 28.284L34.142 398.804C21.543 411.404 0 402.48 0 384.662z"></path></svg></div></div></div></div></div><div class="comments"><div id="disqus_thread"></div></div></article></div><footer id="footer"><div class="copyright"><span>© <a href="mailto:jk787787@naver.com">Kangmo Han</a>, All rights reserved. Powered by <!-- --> <a href="https://www.gatsbyjs.org/">Gatsby</a></span></div><div class="submenu"></div></footer></div></div><script>
   
   
   if(true) {
