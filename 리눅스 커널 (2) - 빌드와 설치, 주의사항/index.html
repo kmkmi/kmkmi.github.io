@@ -235,11 +235,15 @@ e.g. x86 아키텍처 => arch/x86/include/asm 디렉토리에 있음<br>
 이 함수는 아주 익숙한 printf 함수와 거의 같은 방식으로 작동<br>
 printk 함수는 형식화한 문자열을 커널 로그 버퍼에 복사하며, 이 메시지는 보통 <strong>syslog</strong> 프로그램이 처리<br>
 사용법은 printf() 함수와 유사</p>
-<p><code class="language-text">printk(&quot;Hello wolrd! A string &#39;%s&#39; and an integer &#39;%d&#39;\n&quot;, str, i);</code></p>
+<div class="gatsby-highlight" data-language="c">
+      <pre class="language-c"><code class="language-c"><span class="token function">printk</span><span class="token punctuation">(</span><span class="token string">"Hello wolrd! A string '%s' and an integer '%d'\n"</span><span class="token punctuation">,</span> str<span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+      </div>
 <p>printf 함수와 printk 함수 사이의 주목할 만한 차이점 하나는 printk 함수에는 우선순위 플래그를 줄 수 있다는 점이다.<br>
 이 플래그를 통해 syslogd(데몬 프로그램)가 커널 메시지를 어느 곳에 표시할지를 결정할 수 있다.<br>
 이 기능을 사용하는 예를 들어보면 다음과 같다.  </p>
-<p><code class="language-text">printk(KERN_ERR &quot;this is an error!\n&quot;);</code></p>
+<div class="gatsby-highlight" data-language="c">
+      <pre class="language-c"><code class="language-c"><span class="token function">printk</span><span class="token punctuation">(</span>KERN_ERR <span class="token string">"this is an error!\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+      </div>
 <p>KERN_ERR과 출력 메시지 사이에 쉼표가 없는 점에 주의<br>
 이는 의도된 표현 방식<br>
 우선순위 플래그는 문자형으로 표시된 선처리 지시자로 컴파일 과정에서 출력 메시지와 합쳐진다.  </p>
@@ -262,7 +266,9 @@ ISO C99는 C 언어의 공식적인 개정판으로 기존과 큰 차이 없으�
 커널 개발자들은 일부 실행시간이 중요한 함수에 대해 인라인 함수 사용  </p>
 <p>큰 함수를 인라인으로 만드는 일은 해당 함수가 특별히 자주 사용되거나 실행시간에 극히 민감한 경우가 아니라면 피하는 것 권장  </p>
 <p>인라인 함수는 함수 정의부분에 static과 inline 지시어를 사용해 선언  </p>
-<p><code class="language-text">static inline void wolf(unsigned long tail_size)</code></p>
+<div class="gatsby-highlight" data-language="c">
+      <pre class="language-c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">inline</span> <span class="token keyword">void</span> <span class="token function">wolf</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">long</span> tail_size<span class="token punctuation">)</span></code></pre>
+      </div>
 <p>인라인 함수 정의는 함수를 사용하기 전에 해야 함. 그렇지 않으면 컴파일러가 함수를 인라인으로 만들 수 없음.<br>
 인라인 함수를 헤더 파일에 두고 사용하는 것이 일반적.  인라인 함수는 static으로 지정했으므로 외부에서 사용 불가.<br>
 인라인 함수가 한 파일에서만 사용된다면 해당 파일의 최상단에 둘 수 있음.  </p>
@@ -272,10 +278,10 @@ ISO C99는 C 언어의 공식적인 개정판으로 기존과 큰 차이 없으�
 이 기능은 특정 시스템 아키텍처에서만 사용하는 커널 소스에서 사용  </p>
 <p>인라인 어셈블리 이용 시 asm() 컴파일러 지시자 사용<br>
 e.g. x86 프로세서의 rdtsc 명령 실행해서 타임스탬프 레지스터(tsc) 내용 받아오는 코드</p>
-<div class="gatsby-highlight" data-language="text">
-      <pre class="language-text"><code class="language-text">unsigned int low, high;
-asm volatile(&quot;rdtsc&quot; : &quot;=a&quot; (low), &quot;=d&quot; (high));
-/* 이제 low와 high에는 각각 64비트 tsc의 하위 32비트, 상위 32비트의 값이 들어간다. */</code></pre>
+<div class="gatsby-highlight" data-language="c">
+      <pre class="language-c"><code class="language-c"><span class="token keyword">unsigned</span> <span class="token keyword">int</span> low<span class="token punctuation">,</span> high<span class="token punctuation">;</span>
+<span class="token keyword">asm</span> <span class="token keyword">volatile</span><span class="token punctuation">(</span><span class="token string">"rdtsc"</span> <span class="token operator">:</span> <span class="token string">"=a"</span> <span class="token punctuation">(</span>low<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"=d"</span> <span class="token punctuation">(</span>high<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">/* 이제 low와 high에는 각각 64비트 tsc의 하위 32비트, 상위 32비트의 값이 들어간다. */</span></code></pre>
       </div>
 <p>리눅스 커널은 C와 어셈블리를 혼합해서 작성되어 있는데, 어셈블리는 주로 하부 아키텍처와 관련되어 있거나 빠른 속도를 요하는 부분에서 사용<br>
 대부분의 커널 코드는 C로 작성 되어 있음  </p>
@@ -284,24 +290,24 @@ asm volatile(&quot;rdtsc&quot; : &quot;=a&quot; (low), &quot;=d&quot; (high));
 컴파일러는 이 지시자를 이용해 분기를 예측 가능<br>
 커널은 이 지시자를 사용하기 쉽게 likely()와 unlikely()라는 매크로로 만들어 사용  </p>
 <p>다음과 같은 코드에서</p>
-<div class="gatsby-highlight" data-language="text">
-      <pre class="language-text"><code class="language-text">if (error) {
-	/* ... */
-}</code></pre>
+<div class="gatsby-highlight" data-language="c">
+      <pre class="language-c"><code class="language-c"><span class="token keyword">if</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">/* ... */</span>
+<span class="token punctuation">}</span></code></pre>
       </div>
 <p>다음과 같은 방식으로 이 분기가 거의 실행되지 않음을 표시 가능 </p>
-<div class="gatsby-highlight" data-language="text">
-      <pre class="language-text"><code class="language-text">/* error 값이 거의 항상 0일 것으로 생각 가능 */
-⁭if (unlikely(error)) {
-	/* ... */
-}</code></pre>
+<div class="gatsby-highlight" data-language="c">
+      <pre class="language-c"><code class="language-c"><span class="token comment">/* error 값이 거의 항상 0일 것으로 생각 가능 */</span>
+⁭<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">unlikely</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">/* ... */</span>
+<span class="token punctuation">}</span></code></pre>
       </div>
 <p>반면, 항상 실행될 것 같은 경우</p>
-<div class="gatsby-highlight" data-language="text">
-      <pre class="language-text"><code class="language-text">/* success 값은 거의 항상 0이 아닐 것으로 간주 */
-if (likely(error)) {
-	/* ... */
-}</code></pre>
+<div class="gatsby-highlight" data-language="c">
+      <pre class="language-c"><code class="language-c"><span class="token comment">/* success 값은 거의 항상 0이 아닐 것으로 간주 */</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">likely</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">/* ... */</span>
+<span class="token punctuation">}</span></code></pre>
       </div>
 <p>분기의 방향이 거의 대부분 알려진 한 방향으로만 일어나는 경우, 또는 다른 경우를 무시하고 한 가지 경우에 대해서만 최적화가 필요한 경우 이 지시자 사용<br>
 매우 중요한 사항으로, 이 지시자 오용 시에 심각한 성능저하<br>
