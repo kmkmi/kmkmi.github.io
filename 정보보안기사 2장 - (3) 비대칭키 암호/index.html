@@ -116,9 +116,390 @@ Diffie-Hellman 키 교환보다 짧은 키 길이로 높은 보안성 실현 가
 <li>
 <p><strong>중간자 공격</strong>(man-in-the-middle attack)</p>
 <ul>
-<li></li>
+<li>키 교환 프로토콜은 이런 공격에 취약함<br>
+인증단계가 없기 때문<br>
+이런 공격 막기 위해서는 전자서명과 공개키 인증서 등 이용하면 됨  </li>
 </ul>
 </li>
+</ol>
+<h5></h5>
+<ul>
+<li>중간자 공격 : 양동이 소방대 공격(bucket brigade attack)이라고도 함<br>
+마치 불을 끄려고 한줄로 늘어선 자원 봉사자들이 물이든 양동이를 옆사람에게 전달하는 모양처럼 보이기 때문
+Diffie-Hellman에 기반을 둔 방법에서는 이런 공격 막기 위해 인증 사용, 이를 방어하려고 TLS 통신 생김</li>
+<li>국-대-국 키 합의 : 국-대-국 프로토콜(STS, Station-To-Station protocol)은 Diffie-Hellman에 기반을 둔 방법<br>
+여기서 Alice, Bob 사이의 세션키 만들기 위해 공개키 인증서 이용한 전자서명 사용<br>
+국-대-국 프로토콜은 중간자 공격에 안전 </li>
+</ul>
+<p><strong>(라) Diffie-Hellman 알고리즘의 응용</strong></p>
+<ol>
+<li>중간자 공격의 취약성 문제는 세션키를 생성하는 통신 당사자 A와 B가 교환하는 메시지에 대한 인증을 통해 해결 가능<br>
+IP 스푸핑을 통한 DoS 공격은 키 생성 요청자를 확인하기 위한 쿠키(cookie)를 사용함으로써 방지 가능 </li>
+<li>현재 DH 기법 기반의 대칭키 분배는 중간자 공격과 DoS 공격 취약성을 보완하여 IPSec, SSL 등 다양한 인터넷 보안 프로토콜에 광범위하게 적용됨</li>
+</ol>
+<h4>5) 공개키 암호에 의한 해결</h4>
+<ol>
+<li>대칭키 암호에서 <strong>암호화키</strong>와 <strong>복호화키</strong>는 같음<br>
+그러나 공개키 암호에서는 <strong>암호화키</strong>와 <strong>복호화키</strong> 다름</li>
+<li>수신자는 미리 <strong>암호화키</strong>를 송신자에게 알려줌
+이 <strong>암호화키</strong>는 도청자에게 알려져도 괜찮음<br>
+송신자는 <strong>암호화키</strong>로 암호화하여 수신자에게 보냄</li>
+<li>복호화 할 수 있는 것은 <strong>복호화키</strong> 가지고 있는 수신자뿐<br>
+<strong>복호화키</strong>는 수신자에게 배송될 필요 없음</li>
+</ol>
+<h3>(2) 공개키 암호(public-key cryptography)</h3>
+<h4>1) 개요</h4>
+<ol>
+<li>대칭키 암호는 평문을 복잡한 형태로 변환하여 기밀성 유지<br>
+공개키 암호는 수학적으로 해결하기 곤란한 문제를 토대로 기밀성 유지  </li>
+<li>공개키 암호에서는 <strong>암호화키</strong>와 <strong>복호화키</strong> 분리되어 있음<br>
+송신자는 <strong>암호화키</strong> 사용하여 메시지 암호화 하고, 수신자는 <strong>복호화키</strong> 사용 암호문 복호화 함</li>
+<li>키쌍을 이루고 있는 2개의 키는 서로 밀접한 관계(수학적 관계) 있음<br>
+이 때문에 공개키와 개인키를 각각 별개로 만들 수 없음  </li>
+</ol>
+<h5></h5>
+<ul>
+<li>
+<p>공개키 사용 원칙  </p>
+<ul>
+<li>암호화키와 복호화키는 같은 사람의 키쌍이어야 제시</li>
+<li>키는 암 * 복호화 중 한 번만 사용해야 함</li>
+<li>타인의 개인키 사용 불가해야 함</li>
+</ul>
+</li>
+<li>
+<p>공개키 암호화<br>
+소인수분해 문제(Integer Fatorization problem)  </p>
+<ul>
+<li>RSA  </li>
+<li>Rabin  </li>
+</ul>
+<p>이산대수 문제(Discrete Logarithms Problem)  </p>
+<ul>
+<li>ElGamal  </li>
+<li>DSA  </li>
+<li>ECC(타원곡선)</li>
+</ul>
+</li>
+</ul>
+<h4>2) 공개키 암호의 역사</h4>
+<ol>
+<li>디피, 헬만이 공개키 암호화 아이디어 최초 발표</li>
+<li>당시 구체적 알고리즘 없이 어떤 특성 갖춰야 하는지 제시</li>
+<li>Ron Rivest, Adi Shamir, Leonard Adleman이 RSA 발표, 공개키 암호의 De Facto Standard(사실 표준)이라 볼 수 있음</li>
+</ol>
+<h4>3) 대칭키 vs 비대칭키</h4>
+<ol>
+<li>비대칭키(공개키) 암호시스템의 등장으로 인해 대칭키(비밀키) 암호시스템 역할 없어지지 않음</li>
+<li>비대칭키 암호시스템이 암*복호화에 수학적 함수 사용하여 속도가 대칭키 암호시스템보다 무척 느리기 때문<br>
+메시지 크기 큰 경우 대칭키 암호시스템 역할 중요</li>
+<li>비대칭키 암호시스템은 인증, 전자서명, 대칭키 교환에 유용하게 사용됨  </li>
+</ol>
+<h5></h5>
+<ul>
+<li>
+<p>공개키 암호에 대한 오해  </p>
+<ul>
+<li>공개키 암호가 관용 암호보다 암호해독에 있어 더 안전한건 아님. 안전도는 키 길이와 해독에 필요한 계산량이 결정함.</li>
+<li>관용 암호를 대체하지 못함. 계산량 차이로 인한 속도차 때문.</li>
+<li>관용 암호 경우 키 분배 센터를 이용해야 하는 번거로움 때문에 공개키 사용 시 키 분배가 매우 쉬워진다고 착각함. 사실은 공개키 암호에서도 모종의 프로토콜 형태나 중앙 에이전트 필요함. 사용하는 절차도 관용암호보다 단순하거나 효과적이라고 볼 수는 없음.</li>
+</ul>
+</li>
+</ul>
+<h3>(3) RSA 암호시스템</h3>
+<h4>1) 개요</h4>
+<p><strong>(가) 기본개념</strong></p>
+<ol>
+<li>공개키 암호 알고리즘의 사실상 표준</li>
+<li>RSA는 개발자 Ron <strong>R</strong>ivest, Adi <strong>S</strong>hamir, Leonard <strong>A</strong>dleman의 이름 첫 글자 따서 붙여짐</li>
+<li>인수분해 문제(Prime factorization) 해결의 높은 난이도를 이용한 가장 대표적인 공개키 암호 알고리즘<br>
+암호화뿐만 아니라 전자서명의 용도로도 사용됨</li>
+<li>SSL 프로토콜을 가진 많은 웹 브라우저, PGP(Pretty Good Privacy) 그리고 공개키 암호시스템 사용하는 정부시스템 등이 RSA 사용함</li>
+</ol>
+<p><strong>(나) 암호화와 복호화</strong></p>
+<ol>
+<li>RSA에서는 두 개의 지수 e와 d 사용<br>
+여기서 e는 공개하는 값, d는 비밀 값, P는 평문, C는 암호문</li>
+<li>Alice는 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><msup><mi>P</mi><mi>e</mi></msup></mrow><annotation encoding="application/x-tex">C = P^e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">e</span></span></span></span></span></span></span></span></span></span></span> mod <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span>을 이용하여 평문 P에서 암호문 C 생성함<br>
+Bob은 암호문 C에서 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><msup><mi>C</mi><mi>d</mi></msup></mrow><annotation encoding="application/x-tex">P = C^d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">d</span></span></span></span></span></span></span></span></span></span></span> mod <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span>을 구하여 Alice가 보낸 평문 얻음<br>
+모듈러 n은 매우 큰 수이고 키 생성 프로세스를 통해서 만들어짐</li>
+</ol>
+<p><strong>(다) 키 생성</strong></p>
+<ol>
+<li>
+<p>알고리즘</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span></span></span></span>와 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span></span></span>의 두 개의 서로 다른 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>p</mi><mo mathvariant="normal">≠</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(p \neq q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">p</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mrel"><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel"></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span><span class="mrel">=</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span> 소수를 고름</li>
+<li>두 수를 곱하여 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mi>p</mi><mi>q</mi></mrow><annotation encoding="application/x-tex">N = pq</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span></span></span>를 찾음</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mi>p</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>q</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\phi (N) = (p-1)(q-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">p</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span>을 구함</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\phi (N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>보단 작고, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\phi (N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>과 서로소인 정수 e를 찾음</li>
+<li>확장된 유클리드 호제법 이용하여 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>×</mo><mi>e</mi></mrow><annotation encoding="application/x-tex">d \times e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">d</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">e</span></span></span></span>를 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\phi (N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>로 나누었을 때 나머지가 1인 정수 d를 구함 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>d</mi><mi>e</mi><mo>≡</mo><mn>1</mn><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">(de \equiv 1(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">d</span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≡</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mopen">(</span></span></span></span> mod <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\phi (N)))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span></li>
+</ul>
+</li>
+<li>만약 공개키 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span>과 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">e</span></span></span></span>로 부터 비밀키 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span></span></span></span>를 구할 수 있다면 RSA는 해독됨<br>
+이렇게 하기 위해선 공개키 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span>으로부터 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mi>p</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>q</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\phi (n) = (p-1)(q-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">p</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span>을 구해야 함<br>
+<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\phi (n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>을 구하게 되면 유클리드 알고리즘 이용해 쉽게 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span></span></span></span>를 구할 수 있게 되므로<br>
+RSA 알고리즘 안전성은 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span>의 소인수 분해, 즉 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span></span></span></span>와 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span></span></span>를 구해 내는 것에 달려 있음  </li>
+<li>안전을 위해서 권장되는 각 소수 p와 q의 크기는 512 비트<br>
+이 크기는 10진수로 약 154자리수<br>
+이런 소수를 사용하면 모듈러로 사용할 n은 1024비트로 십진수 309자리가 됨</li>
+</ol>
+<hr>
+<ul>
+<li>RSA 알고리즘 : <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo separator="true">,</mo><mi>e</mi></mrow><annotation encoding="application/x-tex">n,e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">n</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">e</span></span></span></span>는 공개하고 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo separator="true">,</mo><mi>q</mi><mo separator="true">,</mo><mi>d</mi><mo separator="true">,</mo><mi>ϕ</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">p,q,d,\phi (n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">p</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">d</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>은 비밀</li>
+<li>키 생성  </li>
+</ul>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo separator="true">,</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">p,q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span></span></span> 선택		p와 q는 모두 소수 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>p</mi><mo mathvariant="normal">≠</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(p \neq q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">p</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mrel"><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel"></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span><span class="mrel">=</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span>	(개인, 선택된 것)  </p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mi>p</mi><mi>q</mi></mrow><annotation encoding="application/x-tex">N = pq</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span></span></span>를 계산					(공개, 계산된 것)  </p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mi>p</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>q</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\phi (N) = (p-1)(q-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">p</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span>를 계산  </p>
+<p>정수 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">e</span></span></span></span>를 선택 	gcd<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>ϕ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>e</mi><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn><mo separator="true">;</mo><mn>1</mn><mo>&lt;</mo><mi>e</mi><mo>&lt;</mo><mi>ϕ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\phi (N), e) = 1; 1 &lt; e &lt; \phi (N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">e</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">1</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>	(공개, 선택된 것)  </p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span></span></span></span>를 계산		<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">de</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault">e</span></span></span></span> mod <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\phi (N) = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 		(개인, 계산된 것)  </p>
+<p>공개키		<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>U</mi><mo>=</mo><mrow><mi>e</mi><mo separator="true">,</mo><mi>n</mi></mrow></mrow><annotation encoding="application/x-tex">PU = {e, n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.10903em;">U</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span></span></span></span></span><br>
+개인키		<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>R</mi><mo>=</mo><mrow><mi>d</mi><mo separator="true">,</mo><mi>n</mi></mrow></mrow><annotation encoding="application/x-tex">PR = {d, n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span></span></span></span></span>  </p>
+<ul>
+<li>암호화<br>
+평문 : <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span></span></span></span><br>
+암호문 : <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><msup><mi>P</mi><mi>e</mi></msup><mi>m</mi><mi>o</mi><mi>d</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">C = P^e mod n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">e</span></span></span></span></span></span></span></span><span class="mord mathdefault">m</span><span class="mord mathdefault">o</span><span class="mord mathdefault">d</span><span class="mord mathdefault">n</span></span></span></span></li>
+<li>복호화<br>
+암호문 : <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span><br>
+평문 : <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><msup><mi>C</mi><mi>d</mi></msup><mi>m</mi><mi>o</mi><mi>d</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">P = C^d mod n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">d</span></span></span></span></span></span></span></span><span class="mord mathdefault">m</span><span class="mord mathdefault">o</span><span class="mord mathdefault">d</span><span class="mord mathdefault">n</span></span></span></span></li>
+</ul>
+<h4>2) 예시</h4>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mn>17</mn><mo separator="true">,</mo><mi>q</mi><mo>=</mo><mn>11</mn></mrow><annotation encoding="application/x-tex">p = 17, q =11</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">1</span><span class="mord">7</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">1</span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mi>p</mi><mi>q</mi><mo>=</mo><mn>17</mn><mo>×</mo><mn>11</mn><mo>=</mo><mn>187</mn></mrow><annotation encoding="application/x-tex">N = pq = 17 \times 11 = 187</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">8</span><span class="mord">7</span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mi>p</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>q</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mn>16</mn><mo>×</mo><mn>10</mn><mo>=</mo><mn>160</mn></mrow><annotation encoding="application/x-tex">\phi (N) = (p-1)(q-1) = 16 \times 10 =160</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">p</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">6</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">6</span><span class="mord">0</span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo><mo>=</mo><mn>160</mn></mrow><annotation encoding="application/x-tex">\phi (N) = 160</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">6</span><span class="mord">0</span></span></span></span>보다 작으면서 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\phi (N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>과 서로소인 수 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">e</span></span></span></span> 선택 </p>
+<p>ex) <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mo>=</mo><mn>7</mn></mrow><annotation encoding="application/x-tex">e = 7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>&lt;</mo><mn>160</mn></mrow><annotation encoding="application/x-tex">d &lt; 160</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">d</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">6</span><span class="mord">0</span></span></span></span>이면서 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">de</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault">e</span></span></span></span> mod <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>160</mn><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">160 = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">6</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>인 수 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span></span></span></span> 결정 </p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>23</mn></mrow><annotation encoding="application/x-tex">d = 23</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord">3</span></span></span></span> (왜냐하면, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>23</mn><mo>×</mo><mn>7</mn><mo>=</mo><mn>161</mn><mo>=</mo><mn>1</mn><mo>×</mo><mn>160</mn><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">23 \times 7 = 161 = 1 \times 160 + 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">6</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">6</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>) </p>
+<p>결과로 얻어지는 공개키 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>U</mi><mo>=</mo><mrow><mn>7</mn><mo separator="true">,</mo><mn>187</mn></mrow><mo separator="true">,</mo><mi>P</mi><mi>R</mi><mo>=</mo><mrow><mn>23</mn><mo separator="true">,</mo><mn>187</mn></mrow></mrow><annotation encoding="application/x-tex">PU = {7, 187}, PR = {23, 187}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.10903em;">U</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord">7</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mord">8</span><span class="mord">7</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord">2</span><span class="mord">3</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mord">8</span><span class="mord">7</span></span></span></span></span></p>
+<h4>3) RSA에 대한 공격</h4>
+<p><strong>(가) 수학적 공격(소인수분해 공격)</strong>  </p>
+<ol>
+<li>두 개의 소수 곱을 인수분해하려고 시도하는 공격<br>
+막기 위해선 키의 길이가 충분히 길어야 함<br>
+개인키 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span></span></span></span>의 비트 수가 크면 클수록 안전</li>
+<li>키 생성, 암*복호화 계산량 고려해야 함, 키 길이 너무 길면 시스템 처리 속도 느려짐</li>
+<li>현실적인 시간 내에 소인수분해를 마칠 수 있는 효율적인 소인수분해 알고리즘 없이는 RSA 안전하다고 말할 수 있음</li>
+</ol>
+<p><strong>(나) 타이밍 공격(시간 공격)</strong></p>
+<ol>
+<li>복호화 알고리즘의 실행 시간에 따라 달라짐(선택-암호문 공격)</li>
+<li>다양한 방법 통해 소요되는 시간 드러나지 않게 키 길이를 추측하는 공격을 막을 수 있음<br>
+랜덤 지체(random delay) 방법 이용 타이밍 공격 방지</li>
+</ol>
+<p><strong>(다) 선택 암호문 공격(CCA)과 OAEP</strong></p>
+<ol>
+<li>CCA는 임의의 데이터 송신 시 그것을 암호문으로 간주하고 회신해 주는 서비스(이 서비스를 일컬어 복호 오라클<strong>Decryption Oracle</strong>)를 공격자가 이용</li>
+<li>네트워크에서 통신하는 서버는 송신한 데이터에 형식 갖추어지지 않으면 '데이터 오류'라고 오류 메시지 반송하는 경우 있어 이 점을 공격자가 이용</li>
+<li>공격자는 자신이 만든 위조 암호문을 서버에 여러 차례 보냄, 서버가 회신해 주는 오류 메시지나 타이밍 해석해 키나 평문 정보를 얻음<br>
+=> 이 경우 서버가 복호 오라클처럼 작동하게 되버림</li>
+<li>정교한 선택 암호문 공격 막기 위해 RSA Security사에서 최적 비대칭 암호화 패딩(OAEP, Optimal Asymmetric Encryption Padding)이라는 프로시저 사용해 평문 수정 권고</li>
+</ol>
+<h4>4) 최적 비대칭키 암호 패딩(OAEP)</h4>
+<p><strong>(가) 개요</strong></p>
+<ol>
+<li>RSA-OAEP는 RSA를 개량한 알고리즘</li>
+<li>RSA-OAEP의 암호화에서는 평문 해시값과 정해진 개수의 '0' 등으로 만들어진 [인증 정보]를 평문의 앞에 추가하고 RSA로 암호화함(패딩)</li>
+<li>RSA-OAEP의 복호화에서는 RSA로 복호화한 후 올바른 [인증 정보] 나타나지 않으면 어떤 오류인지 구체적 알림 없는 오류 회신함</li>
+<li>위 방법으로 RSA-OAEP의 복호 오라클로부터 정보 얻을 수 없어지기 때문에 CCA로부터 안전해짐</li>
+<li>실제의 RSA-OAEP에서는 난수 이용해 암호문이 매번 다른 패턴이 되도록 하여 보다 안전성 높임</li>
+</ol>
+<h4>5) 권장사항</h4>
+<ol>
+<li>
+<p>이론적이거나 실험적 결과에 근거한 권장사항</p>
+<ul>
+<li>n의 비트수는 적어도 1024비트, n은 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>1024</mn></msup></mrow><annotation encoding="application/x-tex">2^{1024}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">0</span><span class="mord mtight">2</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></span> 근방의 수거나 309자리 이상의 십진수 되어야 함</li>
+<li>두 소수 p, q는 적어도 512비트, p, q는 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>512</mn></msup></mrow><annotation encoding="application/x-tex">2^{512}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">5</span><span class="mord mtight">1</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span> 근방 수거나 154자리 이상의 십진수 되어야 함</li>
+<li>p와 q는 같지 않고 거의 같은 크기의 소수여야 함</li>
+<li>p-1과 q-1은 커다란 소인수를 각각 가져야 함</li>
+<li>p-1과 q-1의 최대공약수는 작은 수여야 함</li>
+</ul>
+</li>
+</ol>
+<h3>(4) Rabin 암호시스템</h3>
+<h4>1) 개요</h4>
+<ol>
+<li>RAbin이 고안함. 합성수 모듈러에 관하여 제곱근을 찾기 어렵다는 사실로부터 안전성 얻음<br>
+인수 분해 문제 푸는 어려움과 동등한 문제<br>
+RSA 암호 방식에서 공개키 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>n</mi><mo separator="true">,</mo><mi>e</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(n, e)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">e</span><span class="mclose">)</span></span></span></span>의 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">e</span></span></span></span>를 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span>로 바꾼 것이 Rabin </li>
+</ol>
+<h4>2) 암호화와 복호화</h4>
+<ol>
+<li>암호화는 매우 간단, 한 번의 곱셈 연산으로 이루어져 있고 매우 빨리 수행됨</li>
+<li>Rabin 암호시스템은 성능이 낮은 플랫폼에서 잘 활용됨<br>
+스마트카드의 매우 제한된 메모리 환경에 빠른 CPU 연산으로 작동</li>
+</ol>
+<h4>3) Rabin 시스템의 보안</h4>
+<ol>
+<li>p와 q가 충분히 크면 안전</li>
+<li>시스템 복잡도가 큰 수 n을 두 개의 소수의 곱으로 소인수분해하는 수준의 복잡도와 동일<br>
+즉, RSA만큼 안전</li>
+</ol>
+<h5></h5>
+<ul>
+<li>Rabin 암호시스템은 소인수분해가 곤란한 점을 이용하고, 복호화 시 동등 확률 평문 4개가 나오는 비결정적 알고리즘임</li>
+</ul>
+<h3>(5) ElGamal 방식</h3>
+<h4>1) 개요</h4>
+<ol>
+<li>발명자 이름 Taher ElGAmal에서 따온 이름</li>
+<li>이산대수 문제에 근거해서 만듬(오픈 소스 기초로 키 분배 방식 및 공개키 암호 방식 실현)</li>
+<li>디지털 서명, 암호화, 키 교환에 사용될 수 있는 공개키 알고리즘<br>
+실제로 Diffie-Hellman 알고리즘의 확장</li>
+<li>주요 결점은 성능. 다른 알고리즘 비해 가장 느림.</li>
+</ol>
+<h4>2) 특징</h4>
+<ol>
+<li>ElGamal 암호계에서는 암호문 전달 과정에서 알 수 있듯이 평문이 암호문으로 될 때 순서쌍으로 표현됨으로 이 암호계에서 암호문의 길이는 평문의 2배가 됨</li>
+<li>RSA에 비해 그만큼 많은 메모리 공간 필요, 전송 속도 또한 지체되는 단점 있음<br>
+최근 이산대수 문제에 대한 연구 발전됨에 따라 소수 p의 크기 768비트 이상 수 사용 권고됨</li>
+</ol>
+<h5></h5>
+<ul>
+<li>ElGamal 암호시스템이 안전하기 위해서는 p는 적어도 300자리 이상 십진수, r은 암호화할 때마다 매번 다르게 사용해야 함</li>
+</ul>
+<h4>3) 응용</h4>
+<ol>
+<li>ElGamal은 RSA 활용할 수 있는 곳에는 어디에나 사용 가능<br>
+키 교환, 인증, 짧은 메시지 암*복호화</li>
+<li>암호 SW GnuPG에 구현되 있음</li>
+</ol>
+<h3>(6) 타원 곡선 암호(ECC, Elliptic Curve Cryptosystem)</h3>
+<h4>1) 등장 배경</h4>
+<ol>
+<li>RSA, ElGamal은 키가 매우 커야 한다는 단점 있음</li>
+<li>동일 수준 보안성 제공하며 키의 길이 짧아도 되는 암호시스템 연구하여 타원 곡선 이론 근거해 개발</li>
+</ol>
+<h4>2) 특징</h4>
+<ol>
+<li>타원 곡선 암호는 유한체 위에서 정의된 타원곡선 군에서의 이산대수 문제에 기초한 공개키 알고리즘<br>
+RSA에 이어 전자상거래의 핵심 기술로 주목 받음</li>
+<li>코블리치, 밀러가 처음 제안</li>
+<li>RSA보다 비트수를 적게 하면서도 동일 성능 제공하는 것이 가장 큰 특징(160비트 ECC는 1024비트의 RSA 키와 동일 보안 수준)  </li>
+<li>다양한 암호방식 설계 용이, HW*SW 구현 용이.<br>
+이런 장점 때문에 스마트카드, 무선통신 단말기 등 메모리와 처리 능력 제한된 응용분야에 특히 효율적</li>
+</ol>
+<h5></h5>
+<ul>
+<li>
+<p>타원곡선상의 이산대수 문제<br>
+주어진 것  </p>
+<ul>
+<li>타원 곡선 E</li>
+<li>타원 곡선 E 상의 점 G(베이스 포인트)</li>
+<li>타원 곡선 E 상의 점 xG(G를 x배 한 점)  </li>
+</ul>
+<p>구해야 할 것</p>
+<ul>
+<li>수 x</li>
+</ul>
+</li>
+</ul>
+<h3>(7) 대칭키 방식과 비대칭키 방식의 비교</h3>
+<table>
+<thead>
+<tr>
+<th align="center">항목</th>
+<th align="center">대칭키</th>
+<th align="center">공개키</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">키의 상호관계</td>
+<td align="center">암호화키 = 복호화키</td>
+<td align="center">암호화키 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo mathvariant="normal">≠</mo></mrow><annotation encoding="application/x-tex">\neq</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mrel"><span class="mrel"><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel"></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span><span class="mrel">=</span></span></span></span></span> 복호화키</td>
+</tr>
+<tr>
+<td align="center">안전한 키길이</td>
+<td align="center">128비트 이상</td>
+<td align="center">2048비트 이상</td>
+</tr>
+<tr>
+<td align="center">암호화키</td>
+<td align="center">비밀</td>
+<td align="center">공개</td>
+</tr>
+<tr>
+<td align="center">복호화키</td>
+<td align="center">비밀</td>
+<td align="center">비밀</td>
+</tr>
+<tr>
+<td align="center">비밀키 전송</td>
+<td align="center">필요</td>
+<td align="center">불필요</td>
+</tr>
+<tr>
+<td align="center">키 개수</td>
+<td align="center">N(N-1)/2</td>
+<td align="center">2N</td>
+</tr>
+<tr>
+<td align="center">암호화 속도</td>
+<td align="center">고속</td>
+<td align="center">저속</td>
+</tr>
+<tr>
+<td align="center">경제성</td>
+<td align="center">높다</td>
+<td align="center">낮다</td>
+</tr>
+<tr>
+<td align="center">제공 서비스</td>
+<td align="center">기밀성</td>
+<td align="center">기밀성, 부인방지, 인증</td>
+</tr>
+<tr>
+<td align="center">목적</td>
+<td align="center">데이터(파일) 암호화</td>
+<td align="center">대칭키 교환</td>
+</tr>
+<tr>
+<td align="center">전자서명</td>
+<td align="center">복잡</td>
+<td align="center">간단</td>
+</tr>
+<tr>
+<td align="center">단점</td>
+<td align="center">키 교환 원리 없음</td>
+<td align="center">중간자 공격에 취약</td>
+</tr>
+<tr>
+<td align="center">해당 알고리즘</td>
+<td align="center">DES, 3DES, AES, IDEA</td>
+<td align="center">RSA, ECC, DSA</td>
+</tr>
+</tbody>
+</table>
+<h2>2. 하이브리드 암호시스템</h2>
+<h4>1) 대칭키 암호와 공개키 암호</h4>
+<ol>
+<li>대칭키 암호 사용 시 기밀성 유지 통신 가능, 하지만 키 배송 문제 해결해야 함</li>
+<li>공개키 암호 사용 시 복호화에 사용할 키 배송할 필요 없어지기 때문에 키 배송 문제 해결 가능</li>
+<li>
+<p>공개키 암호에는 2가지 문제 있음</p>
+<ul>
+<li>a. 대칭키 암호에 비해 처리 속도 느림</li>
+<li>b. 중간자 공격에 약함</li>
+</ul>
+</li>
+<li>하이브리드 암호 시스템은 a 문제 해결함<br>
+b 문제는 인증으로 해결</li>
+</ol>
+<h4>2) 하이브리드(hybrid) 암호시스템</h4>
+<p><strong>(가) 개요</strong></p>
+<ol>
+<li>대칭키 암호, 공개키 암호 장점 살려 조합</li>
+<li>일단 고속의 대칭키 암호로 암호화해 메시지 기밀성 지킴</li>
+<li>대칭키 암호의 키 기밀성을 지키기 위해 공개키 암호를 사용해 메시지 암호화 시 사용한 대칭키 암호키를 공개키 암호로 암호화</li>
+</ol>
+<h4>3) 구체적인 예</h4>
+<ol>
+<li>유명 암호 SW인 PGP와 Web의 암호통신에서 사용되는 SSL/TLS에서 하이브리드 암호시스템 사용함</li>
+<li>PGP에서는 하이브리드 암호시스템에 전자서명, 전자서명 검증, 개인키 관리도 추가해 사용함 </li>
 </ol></div></div><div class="blog-post-nav"><div class="prev"><div class="nav-wrap"><div class="angle"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="caret-left" class="svg-inline--fa fa-caret-left fa-w-6 fa-fw " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path fill="currentColor" d="M192 127.338v257.324c0 17.818-21.543 26.741-34.142 14.142L29.196 270.142c-7.81-7.81-7.81-20.474 0-28.284l128.662-128.662c12.599-12.6 34.142-3.676 34.142 14.142z"></path></svg></div><a rel="prev" href="/리눅스 커널 (3) - 프로세스 관리/"><div><p>Previous Post</p><span>리눅스 커널 (3) - 프로세스 관리</span></div></a></div></div><div class="next"><div class="nav-wrap"><a rel="next" href="/캐시 컬러링(페이지 컬러링)/"><div><p>Next Post</p><span>캐시 컬러링(페이지 컬러링)</span></div></a><div class="angle"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="caret-right" class="svg-inline--fa fa-caret-right fa-w-6 fa-fw " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path fill="currentColor" d="M0 384.662V127.338c0-17.818 21.543-26.741 34.142-14.142l128.662 128.662c7.81 7.81 7.81 20.474 0 28.284L34.142 398.804C21.543 411.404 0 402.48 0 384.662z"></path></svg></div></div></div></div></div><div class="comments"><div id="disqus_thread"></div></div></article></div><footer id="footer"><div class="copyright"><span>© <a href="mailto:jk787787@naver.com">Kangmo Han</a>, All rights reserved. Powered by <!-- --> <a href="https://www.gatsbyjs.org/">Gatsby</a></span></div><div class="submenu"></div></footer></div></div><script>
   
   
