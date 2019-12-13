@@ -395,7 +395,269 @@ n비트 해시코드에 대한 공격 난이도</li>
 <h4>1) 개요</h4>
 <p><strong>(가) 기본 개념</strong></p>
 <ol>
-<li></li>
+<li>SHA-512는 다중-블록 메시지로부터 512비트 다이제스트 생성<br>
+각 블록은 1024비트 길이 가짐</li>
+</ol>
+<p><a href="https://en.wikipedia.org/wiki/SHA-2">그림 출처: https://en.wikipedia.org/wiki/SHA-2</a></p>
+<p>
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/5fd24cd2a39be62e786f5f4dc7148771/8ff1e/800px-SHA-2.svg.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 70.625%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsSAAALEgHS3X78AAACuElEQVQ4y51T60tUURAf9+69e5/rruumi6+ShTKQrCAyKSQSoqcRSOFjV7MICQKhh66r7XpRiog+RRLRY9VrvrbQ+lCxu2r5yheGEkTSHxF9bJtzz13atT41MGd+c5j5nTlzzkDLs+iNjsH5cMvzWF9geEELji5rbf0ftY4Xc1r7wIwWHFnUAkMLml+b6fVr068x5gygNHZ9YraCCwKwSTCotnN0+Q4md6rhFTU4uqQimRocWVIxWb395ouqvlztxL1g19jaXV9oqgL+ljRU0xD8p2RktygA3Q4AO2PwmXGx6vCot5k9cLJaLD1RLZRXXeLLTtUKh46fF8rPXuCL9h9W3CWltvwdJRmubdudhcV19kfLpJq3TQBfozWwL28GIP8VWDLHANxIJxFOEyqHyqKakyzDUMwZKgMc42lFU1UA3580QJkjCuDaAJtlA0AhOcmEOik6nB9P2g0gkBPTaCA5GW2lhTZs7jTAbM9FKMj9BlC4uSU6odmozIn4Bwbh62WjzwuUTKAVygyt4p5gAi0dqckBIiG5lkTI0OA/moHViJRIMvZEWmEdR1PGzwGs93ngYNYqQF6CKJ5EyBtJJNlOHjLJJjC+6h6ZfpGwF+DzYBMccaxgD1MIeVExMyyrEDWzFolhOYU1E8zJDFqGYgmtVVT8LO1hDHu49PAK7M1aAyhIIcxx7zRZHVsE2ebg050uQbFnyqJik9CXJKtdRl/HHC86pPRcUZBJP6/mADwoKgYp8z69QcqVgfZHb7xoWMnAiR4SazF+AsTjKROiS0MC3Hwa7fKFJheuP343geM3ERhejLSGJmLtA7MRf/909NbgfAxnPeLrnXqPuoJ+Dclr7vnJJKpyGu/yiyytockKnN9GtB4k8+LM1mOibpHQ2z2+7sX9+ra+Dx6c78uId5E89NP+NZa/AYmLyTY2kxSOAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="  img SHA 2 800px SHA 2 svg"
+        title=""
+        src="/static/5fd24cd2a39be62e786f5f4dc7148771/b9e4f/800px-SHA-2.svg.png"
+        srcset="/static/5fd24cd2a39be62e786f5f4dc7148771/cf440/800px-SHA-2.svg.png 148w,
+/static/5fd24cd2a39be62e786f5f4dc7148771/d2d38/800px-SHA-2.svg.png 295w,
+/static/5fd24cd2a39be62e786f5f4dc7148771/b9e4f/800px-SHA-2.svg.png 590w,
+/static/5fd24cd2a39be62e786f5f4dc7148771/8ff1e/800px-SHA-2.svg.png 800w"
+        sizes="(max-width: 590px) 100vw, 590px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </p>
+<p><strong>(나) 메시지 준비</strong></p>
+<ol>
+<li>입력 메시지 &#x3C; <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>128</mn></msup></mrow><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">2</span><span class="mord mtight">8</span></span></span></span></span></span></span></span></span></span></span></span>비트, 이보다 같거나 크면 처리 불가하지만 대부분 컴퓨터 시스템이 이보다 크기 작아 문제 안됨</li>
+</ol>
+<p><strong>(다) 길이 필드와 패딩</strong></p>
+<ol>
+<li>128비트의 부호 없는 정수 길이 필드를 맨뒤에 붙임<br>
+1024bit의 배수인 전체 크기 = original msg + padding(1000000....0000 형태의 비트열로 세 부분의 총 합을 1024 비트의 배수로 맞춰주는 길이) + length(128bit)</li>
+<li>length에 original msg 길이 비트 표현 저장됨(패딩 전 길이)</li>
+<li>공격자가 해시 값 같으며 입력 값 다른 메시지 찾기 어렵게 하는 효과</li>
+</ol>
+<h4>2) SHA-512 안전성</h4>
+<ol>
+<li>약점 발견 안됨, 같은 해시 값 갖는 두 메시지 찾기의 난이도 = <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>256</mn></msup></mrow><annotation encoding="application/x-tex">2^{256}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mtight">5</span><span class="mord mtight">6</span></span></span></span></span></span></span></span></span></span></span></span> 연산 수행</li>
+<li>이전 SHA들과 동일 구조, 수학적 동일 작동 때문에 우려 존재</li>
+<li>NIST 2007년, 취약점 나올 것 예상하고 SHA-3 공모함</li>
+</ol>
+<h3>(2) SHA-3</h3>
+<h4>1) 개요</h4>
+<ol>
+<li>이론적 공격법 알려진 SHA-1 대체하여 새로운 표준이 된 일방향 해시 알고리즘</li>
+<li>2012년, KECCAK이 SHA-3으로 결정됨</li>
+</ol>
+<h4>2) 선정 과정</h4>
+<ol>
+<li>AES와 같은 경쟁방식에 의한 표준화(Standardization by competition)</li>
+</ol>
+<h4>3) SHA-3 최종 후보와 SHA-3의 결정</h4>
+<ol>
+<li>최종 후보 5개 (BLAKE, Grostl, JH, KECCAK, Skein)</li>
+</ol>
+<h2>3. 메세지 인증 코드(MAC)</h2>
+<h3>(1) 개요</h3>
+<h4>1) 기본 개념</h4>
+<ol>
+<li>무결성 확인, 메시지 인증하는 기술. 사용 시 변경과 거짓 행세 검출 가능 </li>
+<li>임의 길이 메시지와 송신자 및 수신자가 공유하는 키 이 두 개의 입력 기초로 고정 비트길이 출력(MAC 값) 계산</li>
+<li>블록 암호나 해시 함수 기반이라 전자 서명보다 훨씬 빠른 것이 장점</li>
+</ol>
+<h4>2) 변경 감지 코드(MDC, Modification Detection Code)</h4>
+<ol>
+<li>무결성 보장하는 메시지 다이제스트, 변경되지 않은 것 보장</li>
+<li>수신자가 송신자가 보낸 MDC와 자신이 수신한 메시지로 생성한 MDC 비교하여 동일할 시 변경되지 않음 확인 가능</li>
+</ol>
+<h4>3) 메시지 인증 코드(MAC)</h4>
+<ol>
+<li>무결성은 물론 데이터 출원지 보장(송신자 인증)</li>
+<li>A와 B 사이의 비밀값이 포함되어 계산됨 e.g. 비밀키가 비밀 값으로 사용됨 </li>
+</ol>
+<h5></h5>
+<ul>
+<li>MAC는 송, 수신자가 공유하는 키 사용, 키에 의존하는 일방향 해시 함수, 그리고 사용하는 해시 알고리즘의 안전성에 좌우됨</li>
+<li>상호 비밀키를 알고, 두 MAC 값 동일 시: 수신자는 메시지 변경 안 됨을 확신 가능, 공격자가 메시지만 변경하고 MAC 변경 실패 시 수신 코드가 달라짐<br>
+수신자는 메시지 송신자 또는 근원지 확신 가능, 비밀키 아는건 송신자뿐이기 때문<br>
+메시지가 순서번호 사용 시(X.25, HDLC와 TCP에서 사용되는) 공격자 순서 번호 변경 시 MAC 값도 달라지므로 순서 번호도 확신 가능</li>
+</ul>
+<h4>4) MAC의 키 배송 문제</h4>
+<ol>
+<li>MAC에서 송신자와 수신자 키 공유 해야 함</li>
+<li>따라서 키 배송 문제 생김</li>
+</ol>
+<h3>(2) MAC 구현 사례</h3>
+<h4>1) 축소 MAC</h4>
+<ol>
+<li>MAC 안전성 높이기 위해 축소 MAC(nested MAC) 설계됨, 이 안에서 해시가 두 단계로 이루어짐</li>
+<li>첫 번째 단계에서 키에 메시지 이어 붙이고 해시하여 중간 단계 다이제스트 생성<br>
+두 번째 단계에서 키에 중간단계 다이제스트를 이어 붙이고 최종 다이제스트 생성</li>
+</ol>
+<h4>2) HMAC</h4>
+<p><strong>(가) 개요</strong></p>
+<ol>
+<li>SHA-1 같은 일방향 해시함수 사용하여 MAC 구성, 이름의 H는 해시 의미</li>
+<li>강한 일방향 해시 함수 뭐든지 적용 가능 </li>
+<li>RFC 2104로 출판됨, TLS(Transport Layer Security), IPSec(IP Security), SET(Secure Electronic Transaction) 등 프로토콜에 사용됨</li>
+</ol>
+<p><strong>(나) 설계 목표와 단계</strong></p>
+<p><a href="https://en.wikipedia.org/wiki/HMAC">그림 출처: https://en.wikipedia.org/wiki/HMAC</a></p>
+<p>
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/49ee0bd871b75634a8e274a87ce5034f/8ff1e/800px-SHAhmac.svg.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 74.875%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAYAAADkmO9VAAAACXBIWXMAAAsSAAALEgHS3X78AAADNklEQVQ4y2OQc65hVCt+Zy6fcdddq/KbAwMOYN31R8u06aO7bddvT+6j/7lwqWPQtQlkbp6/b3fTrM0fGubsur9w0eSqu+fnJ50+NCspMsRZnIGBnwOkLqFyWW98yawvcWWLXqdm1/U3ZgTHtBZnZkX7uSkDpTltjPWYwAaa60ky3jjYFvHy8rTCYxurc1fMq6q5cmpB0+mDMyoCfW3lgUrEQeoak1ycenIDS+oSnLLSQ90qqzLjG1oLU5uj/Vx1gNLS0uKibGADxSWkmZau2FC5aOm6WRMmz5i8dF7zxFP7p024cnJ+V2FOqBTMJ0Vl1THl1fXzUrLyJmclRE8qiA/p6yzNnJoU4m2A4mUWFmam9LR40c62OtHC/DSRqFBXyZhwV6WC7BBpSzMtVpg6e1trwZiIUDFvDzdRewtjMWNtdQVPOwtZHTUlbpC8oowkirk8QCwMxSBDQIpY///fzfj//3+GuyeKmfi5GTgZGRiE+HmZxKxNeUFqQGHLghEpQBGgOgYmKJeRgXjAKCHKDzKYDQkDzeEWY168eW/hks37+vsXrOxYtGxC35Fdk+ad3Ddt7q2jRXOfXyiae3p72tzdK+PmHlyXOOf5xZL5908WTK7OtwNFGJOqkhAr1KUsYAedCedi2pprW7ctz3bBxhSDeevS9Do3ru2xOrZzktXV3ZlWj49lWe1aEGa9oNvbcsWMELPHZwotnp0vNjTWkwIFmiwrKxMvkBYFYklwcP1fysB41oTB67wJQ9wDJ4aE1w4MLkR6mZWfj50FGlzMcBcyMMgxxrbM80loX5jokN0eE5KUk1KRHl3fkhdfty2Au+6oP0Pt0QCm1mOBjDEgU14eTGE6uzGOSVaKH3t4L/PiZepPdGqekOS8oivCfEl7qPHUkrTYqMasmNgtvpzxx3wZYg77MSQBDXYGqY9UhmsVAqUWIOYHYjEgBoUpF8P/LAamk+4MmZc8GRpu+TO03PZjSMblx8shKFxuaMzCvMsGSyVAwhkoIA0M3P9gARF+HjERQX6hPlt2lsvBDEz7fBiYgS6EJS0GLhY8IaslwMBgKcbApiXIwOUly8AGxPDcwUxKqoQCAAbV/M0vHJA3AAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="  img HMAC 800px SHAhmac svg"
+        title=""
+        src="/static/49ee0bd871b75634a8e274a87ce5034f/b9e4f/800px-SHAhmac.svg.png"
+        srcset="/static/49ee0bd871b75634a8e274a87ce5034f/cf440/800px-SHAhmac.svg.png 148w,
+/static/49ee0bd871b75634a8e274a87ce5034f/d2d38/800px-SHAhmac.svg.png 295w,
+/static/49ee0bd871b75634a8e274a87ce5034f/b9e4f/800px-SHAhmac.svg.png 590w,
+/static/49ee0bd871b75634a8e274a87ce5034f/8ff1e/800px-SHAhmac.svg.png 800w"
+        sizes="(max-width: 590px) 100vw, 590px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </p>
+<p>ipad: 00110110 비트열의 반복<br>
+opad: 01011100 비트열의 반복</p>
+<p>맨 처음 과정에서 키는 0으로만 뒷부분 패딩하여 ipad, opad와 XOR하게 됨 </p>
+<h4>3) CBC-MAC, CMAC</h4>
+<p><strong>(가) 개요</strong></p>
+<ol>
+<li>CBC모드와 유사한 방법<br>
+하지만 N개 평문 블록으로부터 N개 암호문 블록 만드는 것은 아님<br>
+해시 알고리즘 안 씀</li>
+<li>대샌 대칭키 암호 N번 사용하여 N개 평문블록에서 하나의 MAC 생성</li>
+<li>CBC-MAC에 보안 논점 발견되어 CMAC(Cipher-Based MAC) 만들어짐<br>
+둘은 같은 종류 데이터 인증과 무결성 제공하지만 CMAC이 수학적으로 더 안전</li>
+</ol>
+<p><a href="https://en.wikipedia.org/wiki/One-key_MAC">그림 출처: https://en.wikipedia.org/wiki/One-key_MAC</a></p>
+<p>
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/c154bd8527c22f10394307b0e930565a/8179c/page1-1600px-CMAC_-_Cipher-based_Message_Authentication_Code.pdf.jpg"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 54.125%; position: relative; bottom: 0; left: 0; background-image: url('data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAALABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAECBf/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/9oADAMBAAIQAxAAAAHeTCSRP//EABcQAQEBAQAAAAAAAAAAAAAAAAEAEEH/2gAIAQEAAQUC3pDf/8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAwEBPwE//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPwE//8QAFBABAAAAAAAAAAAAAAAAAAAAIP/aAAgBAQAGPwJf/8QAGxAAAgMAAwAAAAAAAAAAAAAAADEBESFBYXH/2gAIAQEAAT8hvoeoiHnJQQk30//aAAwDAQACAAMAAAAQ0+//xAAVEQEBAAAAAAAAAAAAAAAAAAAAIf/aAAgBAwEBPxBH/8QAFREBAQAAAAAAAAAAAAAAAAAAABH/2gAIAQIBAT8QR//EABwQAQACAgMBAAAAAAAAAAAAAAEAMREhEEFR4f/aAAgBAQABPxBYvit3BSZKxQVDXS+k+RHSzfBkb0up/9k='); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="page1 1600px CMAC   Cipher based Message Authentication Code pdf"
+        title=""
+        src="/static/c154bd8527c22f10394307b0e930565a/c739e/page1-1600px-CMAC_-_Cipher-based_Message_Authentication_Code.pdf.jpg"
+        srcset="/static/c154bd8527c22f10394307b0e930565a/8ee9c/page1-1600px-CMAC_-_Cipher-based_Message_Authentication_Code.pdf.jpg 148w,
+/static/c154bd8527c22f10394307b0e930565a/ebbe7/page1-1600px-CMAC_-_Cipher-based_Message_Authentication_Code.pdf.jpg 295w,
+/static/c154bd8527c22f10394307b0e930565a/c739e/page1-1600px-CMAC_-_Cipher-based_Message_Authentication_Code.pdf.jpg 590w,
+/static/c154bd8527c22f10394307b0e930565a/5413e/page1-1600px-CMAC_-_Cipher-based_Message_Authentication_Code.pdf.jpg 885w,
+/static/c154bd8527c22f10394307b0e930565a/4efde/page1-1600px-CMAC_-_Cipher-based_Message_Authentication_Code.pdf.jpg 1180w,
+/static/c154bd8527c22f10394307b0e930565a/8179c/page1-1600px-CMAC_-_Cipher-based_Message_Authentication_Code.pdf.jpg 1600w"
+        sizes="(max-width: 590px) 100vw, 590px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </p>
+<p><strong>(나) MAC 검증</strong></p>
+<ol>
+<li>생성에 사용된 연산 반복해서 같은 값인지 확인</li>
+<li>수신 메시지로 계산된 MAC과 송신자가 보낸 MAC 비교, 같으면 올바른 것</li>
+</ol>
+<h4>4) CCM(Counter with CBC-MAC)</h4>
+<ol>
+<li>CTR과 CBC-MAC 통합함<br>
+동일한 키 사용을 통해 기밀성과 인증(무결성) 제공</li>
+<li>OCM의 핵심적 알고리즘 구성요소는 AES, CTR, CBC-MAC<br>
+암호화와 MAC 알고리즘 양쪽에 동일한 하나의 키 K가 사용됨</li>
+<li>CCM 운용 모드는 NIST에 의해 IEEE802.11 WiFi 무선 근거리 통신망 보안 요구사항 지원하기 위해 표준화됨<br>
+인증 암호 요구하는 다양한 네트워크 응용에서 사용 가능</li>
+</ol>
+<h4>5) GCM 모드</h4>
+<ol>
+<li>CTR 모드에 인증 기능 추가함 GCM(Galois/Counter 모드)</li>
+<li>CTR 모드가 암호문 생성함과 동시에 이 암호문이 올바른지 인증하는 정보를 만들어내는 구조</li>
+<li>적극적 공격자가 암호문 위조 배포해도 위조 여부 알 수 있음</li>
+</ol>
+<h3>(3) MAC에 대한 공격</h3>
+<h4>1) 재전송 공격</h4>
+<p><strong>(가) 개요</strong></p>
+<ol>
+<li>단순 메시지 인증코드는 재전송 공격 방지 불가<br>
+공격자가 전송 메시지와 그 것의 MAC를 스니핑하고 수신자에게 전송 시 수신자는 구별 불가</li>
+<li>순서번호, 타임스탬프, 비표, 시도/응답 등으로 방지</li>
+</ol>
+<p><strong>(나) 순서 번호(sequence number)</strong></p>
+<ol>
+<li>송신 메시지에 매회 1씩 증가하는 번호를 메시지에 포함, MAC 계산 시에도 계산됨</li>
+<li>공격자는 순서번호가 증가한 MAC값 계산 불가<br>
+통신 주체들은 통신상대마다 마지막 순서번호 기록해야하는 필요 생김</li>
+</ol>
+<p><strong>(다) 타임스탬프(timestamp)</strong></p>
+<ol>
+<li>송신 메시지에 현재 시간 포함<br>
+그 이전 시간대의 메시지는 MAC이 일치해도 오류로 단정</li>
+<li>송, 수신자간 시계를 일치시켜 두는 동기화 필요</li>
+</ol>
+<p><strong>(라) 비표(nonce)</strong></p>
+<ol>
+<li>수신자가 송신자에게 송신할 때 사용할 일회용 랜덤 값인 비표를 건넴</li>
+<li>송신자가 비표 포함해 MAC 계산함<br>
+통신 때마다 비표 값 변경되어 재전송 공격 방지됨<br>
+유효하지만 통신 데이터 양이 약간 증가됨</li>
+</ol>
+<p><strong>(마)시도/응답(Challenge/Response)</strong></p>
+<ol>
+<li>송신자가 수신자에게 우선 난수(신청)를 송신하고, 수신자로 부터 송신 이후에 수신되는 메시지(응답)가 올바른 난수 값 포함하는지 확인  </li>
+</ol>
+<h3>(4) MAC으로 해결할 수 없는 문제</h3>
+<h4>1) 제3자에 대한 증명</h4>
+<ol>
+<li>MAC은 공유키 사용해서 MAC 값 계산은 키 공유하는 A,B만 가능<br>
+두 사람이 서로 통신 시 MAC 값 계산할 수 있는 것은 상대방이라고 확신 가능</li>
+<li>하지만 제3자에게 MAC 값 계산한 것이 상대방임을 증명 불가<br>
+전자서명 사용 시 제3자에 대한 증명 가능</li>
+</ol>
+<h4>2) 부인 방지</h4>
+<ol>
+<li>송신자가 제3자에게 수신자에게 메시지 보내지 않았다는 <strong>부인(repudiation)</strong> 가능</li>
+<li>따라서 MAC에서 부인방지(nonrepudiation) 불가</li>
+<li>전자서명으로 부인방지 가능</li>
 </ol></div></div><div class="blog-post-nav"><div class="prev"><div class="nav-wrap"><div class="angle"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="caret-left" class="svg-inline--fa fa-caret-left fa-w-6 fa-fw " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path fill="currentColor" d="M192 127.338v257.324c0 17.818-21.543 26.741-34.142 14.142L29.196 270.142c-7.81-7.81-7.81-20.474 0-28.284l128.662-128.662c12.599-12.6 34.142-3.676 34.142 14.142z"></path></svg></div><a rel="prev" href="/캐시 컬러링(페이지 컬러링)/"><div><p>Previous Post</p><span>캐시 컬러링(페이지 컬러링)</span></div></a></div></div><div class="next"><div class="nav-wrap"><a rel="next" href="/소프트웨어 공학 - 애자일 프로세스, 스크럼/"><div><p>Next Post</p><span>소프트웨어 공학 - 애자일 프로세스, 스크럼</span></div></a><div class="angle"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="caret-right" class="svg-inline--fa fa-caret-right fa-w-6 fa-fw " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path fill="currentColor" d="M0 384.662V127.338c0-17.818 21.543-26.741 34.142-14.142l128.662 128.662c7.81 7.81 7.81 20.474 0 28.284L34.142 398.804C21.543 411.404 0 402.48 0 384.662z"></path></svg></div></div></div></div></div><div class="comments"><div id="disqus_thread"></div></div></article></div><footer id="footer"><div class="copyright"><span>© <a href="mailto:jk787787@naver.com">Kangmo Han</a>, All rights reserved. Powered by <!-- --> <a href="https://www.gatsbyjs.org/">Gatsby</a></span></div><div class="submenu"></div></footer></div></div><script>
   
   
